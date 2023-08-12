@@ -1,0 +1,23 @@
+[package]
+name = "rust-play"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.29.1", features = ["full"] }
+refinery = { version = "0.8.10", features = ["tokio-postgres", "mysql_async"] }
+tokio-postgres = "0.7.8"
+deadpool-postgres = "0.10.5"
+barrel = "0.7.0"
+sqlx = { version = "0.7.1", features = [ "runtime-tokio", "tls-native-tls", "postgres"] }
+postgres-from-row = "0.5.2"
+
+[dev-dependencies]
+criterion = { version = "0.4", features = ["html_reports", "async_tokio"] }
+
+[[bench]]
+name = "postgres_test"
+harness = false
+
