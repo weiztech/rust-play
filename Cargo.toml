@@ -22,6 +22,4 @@ criterion = { version = "0.4", features = ["html_reports", "async_tokio"] }
 name = "postgres_test"
 harness = false
 
-[lib]
-path = "src/lib.rs"
 

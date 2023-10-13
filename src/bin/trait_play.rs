@@ -1,5 +1,4 @@
-extern crate rust_play;
-use crate::rust_play::custom_struct::{Planet, PlanetAction};
+use rust_play::custom_struct::{Planet, PlanetAction};
 
 fn speak_to<T>(s: T) -> usize
 where
