@@ -14,6 +14,7 @@ barrel = "0.7.0"
 sqlx = { version = "0.7.1", features = [ "runtime-tokio", "tls-native-tls", "postgres"] }
 postgres-from-row = "0.5.2"
 rand = "0.8.5"
+lazy_static = { version = "1.4.0", features = [] }
 
 [dev-dependencies]
 criterion = { version = "0.4", features = ["html_reports", "async_tokio"] }
