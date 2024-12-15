@@ -15,7 +15,7 @@ where
     }
 }
 
-pub trait FromOther<T>{
+pub trait FromOther<T>: Sized{
     fn from_other(&self, value: &T) -> Self;
 }
 
@@ -31,14 +31,13 @@ struct Classic(usize);
 
 impl <T> FromOther<T> for Text
 where
-    Numba: FromRef<T>,
-    T: Send + Sync + Debug
+    T: Send + Sync + Debug + FromRef<T>
 {
     fn from_other(&self, value: &T) -> Self {
         println!("Total Str Value {:?}", value);
-        let value_clone = Numba::from_ref(value);
+        let value_clone = T::from_ref(value);
         println!("Clone {:?}", value_clone);
-        Self(value_clone.0.to_string())
+        Self(self.0.to_string())
     }
 }
 
@@ -68,6 +67,8 @@ fn main() {
     let text = Text(String::from("This is text value"));
     let text_clone = Text::from_ref(&text);
     let num = Numba(10);
+    let classic = Classic(10);
     text_clone.from_other(&num);
+    text_clone.from_other(&classic);
     // println!("{text} {text_clone}");
 }
