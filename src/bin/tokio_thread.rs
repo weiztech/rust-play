@@ -3,6 +3,8 @@ extern crate core;
 use core::task;
 use tokio::time::{sleep, Duration};
 use std::time::Instant;
+use futures::future::join_all;
+
 
 async fn cpu_bound_task(id: usize, task_name: &str){
     let start = Instant::now();
@@ -24,6 +26,7 @@ async fn cpu_bound_task(id: usize, task_name: &str){
 #[tokio::main] // Multi threaded runtime
 async fn main() {
     let task_multi = "Multi Thread &str";
+    /*
     let handles: Vec<_> = (1..=5)
         .map(|id| tokio::spawn(cpu_bound_task(id, task_multi))) // Spawns tasks across threads
         .collect();
@@ -45,6 +48,7 @@ async fn main() {
     for handle in handles2 {
         handle.await.unwrap();
     };
+    */
 
     let texts = vec![
         String::from("Vec String - 1st"),
@@ -55,16 +59,16 @@ async fn main() {
     ];
     let mut tasks: Vec<_> = vec![];
     for (id, text) in texts.iter().enumerate() {
-        let task_clone = text.clone();
+        let task_clone = text.as_str();
         // println!("Task Debug `{}` {}", id, task_clone);
         tasks.push(
-            tokio::spawn( async move {
-                cpu_bound_task(id + 1, task_clone.as_str()).await;
-            })
+            async move {
+                cpu_bound_task(id + 1, task_clone).await;
+            }
         );
     };
-
-    for task in tasks {
-        task.await.unwrap();
-    }
+    // Note
+    // on cpu bound task and never yield function, join_all will run sequentially (one thread)
+    // will use multi thread if the function (async) is yield
+    join_all(tasks).await;
 }
